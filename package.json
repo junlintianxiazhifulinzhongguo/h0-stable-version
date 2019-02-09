@@ -7,7 +7,7 @@
     "start": "node server/app.js",
     "dev": "nodemon -w server --exec \"bable-node server --presets env\"",
     "build": "rimraf dist && babel server -s -D -d dist --presets env --plugins transform-decorators-legacy",
-    "production": "npm run build && nodemon dist/app.js"
+    "production": "npm run build && node start"
   },
   "dependencies": {
     "debug": "^4.1.1",
@@ -19,11 +19,12 @@
     "koa-router": "^7.4.0",
     "mongoose": "^5.4.2",
     "glob": "^7.1.3",
-    "bcrypt":"^3.0.3",
+    
     "lodash": "^4.17.11",
-    "ramda": "^0.26.1"
-  },
-  "devDependencies": {
+    "ramda": "^0.26.1",
+    "alipay-sdk": "^3.0.4",
+    "md5-nodejs":"^1.0.3",
+
     "nodemon": "^1.18.9",
     "babel-core": "^6.26.3",
     "babel-polyfill": "^6.26.0",
@@ -37,5 +38,8 @@
     "eslint": "^5.12.0",
     "rimraf": "^2.6.3",
     "parcel-bundler": "^1.11.0"
+  },
+  "devDependencies": {
+   
   }
 }
