@@ -1,8 +1,6 @@
 import Koa from "koa"
-import Router from'koa-router'
 const app = new Koa()
-const router = new Router()
-const SALT_WORK_FACTOR=10
+
 import json from 'koa-json'
 import onerror from 'koa-onerror'
 import bodyparser from 'koa-bodyparser'
@@ -10,9 +8,11 @@ import logger from 'koa-logger'
 const debug = require('debug')('koa2:server')
 import path from 'path'
 import bcrypt from 'bcrypt'
+
 import config from './config'
-import routes from './routes'
 import { connect,iniSchema } from './database/init'
+import { routers } from './routes'
+
 const port = process.env.PORT || config.port
 
 // error handler
@@ -22,8 +22,8 @@ onerror(app)
 app.use(bodyparser())
   .use(json())
   .use(logger())
-  .use(router.routes())
-  .use(router.allowedMethods())
+
+routers(app)
 
 // logger
 app.use(async (ctx, next) => {
@@ -33,11 +33,6 @@ app.use(async (ctx, next) => {
   console.log(`${ctx.method} ${ctx.url} - $ms`)
 })
 
-router.get('/', (ctx, next) => {
-  ctx.body = 'Hello World'
-})
-
-routes(router)
 app.on('error', (err, ctx) => {
   console.log(err)
   logger.error('server error', err, ctx)
@@ -47,6 +42,6 @@ app.on('error', (err, ctx) => {
   await connect()
   await iniSchema()
 })()
-module.exports = app.listen(config.port, () => {
-  console.log(`Listening on http://localhost:${config.port}`)
+module.exports = app.listen(port, () => {
+  console.log(`Listening on http://localhost:${port}`)
 })
