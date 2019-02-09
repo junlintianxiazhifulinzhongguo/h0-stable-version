@@ -1,6 +1,8 @@
 import Router from 'koa-router'
 import glob from 'glob'
 import { resolve, normalize } from 'path'
+import _ from 'lodash'
+const isArray = c => _.isArray(c) ? c : [c]
 const symbolPrefix = Symbol()
 const routerMap = new Map()
 export class Route
@@ -12,56 +14,62 @@ export class Route
         this.router = new Router()
     }
 
-    ini ()
+    init ()
     {
         glob.sync(resolve(__dirname,this.apiPath,'./**/*.js')).forEach(require)
-        for(let [conf, controller] of routerMap)
+        for(let [conf, middleware] of routerMap)
         {
-            
+            const middlewares=isArray(middleware)
+            const prefix = conf.target[symbolPrefix]
+            if(prefix) prefix = normalizePath(prefix)
+            const routerPath=prefix + conf.path
+            this.router[conf.method](routerPath,...middlewares)
         }
+        this.app.use(this.router.routes())
+        this.app.use(this.router.allowedMethods())
     }
 }
 
 
-const controller = path => target => (target.prototype[symbolPrefix] = path)
-const  normalizePath = path.startsWith('/') ? path : `/${path}`
-const router = conf => (target,key,descripor) => {
+export const controller = path => target => (target.prototype[symbolPrefix] = path)
+export const  normalizePath = path => path.startsWith('/') ? path : `/${path}`
+export const router = conf => (target,key,descripor) => {
     conf.path = normalizePath(conf.path)
     routerMap.set({
         target:target,
         ...conf
     },target[key])
 }
-const get = path => router({
+export const get = path => router({
     method: 'get',
     path: path
 })
-const post = path => router({
+export const post = path => router({
     method: 'post',
     path: path
 })
-const put = path => router({
+export const put = path => router({
     method: 'put',
     path: path
 })
-const del = path => router({
+export const del = path => router({
     method: 'del',
     path: path
 })
-const use = path => router({
+export const use = path => router({
     method: 'use',
     path: path
 })
-const all = path => router({
+export const all = path => router({
     method: 'all',
     path: path
 })
 
-export {
-    get,
-    post,
-    put,
-    del,
-    use,
-    all
-}
+// export {
+//     get,
+//     post,
+//     put,
+//     del,
+//     use,
+//     all
+// }
