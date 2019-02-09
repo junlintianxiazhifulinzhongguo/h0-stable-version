@@ -1,18 +1,19 @@
-const Koa = require('koa')
-const Router = require('koa-router')
+
+import Koa from "koa"
+import Router from'koa-router'
 const app = new Koa()
 const router = new Router()
 
-const json = require('koa-json')
-const onerror = require('koa-onerror')
-const bodyparser = require('koa-bodyparser')
-const logger = require('koa-logger')
+import json from 'koa-json'
+import onerror from 'koa-onerror'
+import bodyparser from 'koa-bodyparser'
+import logger from 'koa-logger'
 const debug = require('debug')('koa2:server')
-const path = require('path')
+import path from 'path'
 
-const config = require('./config')
-const routes = require('./routes')
-
+import config from './config'
+import routes from './routes'
+import { connect } from './database/init'
 const port = process.env.PORT || config.port
 
 // error handler
@@ -43,6 +44,10 @@ app.on('error', (err, ctx) => {
   logger.error('server error', err, ctx)
 })
 
+;(async () => {
+  await connect()
+  console.log('wwo')
+})()
 module.exports = app.listen(config.port, () => {
   console.log(`Listening on http://localhost:${config.port}`)
 })
