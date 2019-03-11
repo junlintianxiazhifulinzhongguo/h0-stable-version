@@ -18,5 +18,12 @@ module.exports = {
     SIGN_TYPE: 'RSA2',
     TIMESTAMP: 'yyyy-MM-dd HH:mm:ss',
     VERSION: 1.0
+  },
+  youtu: {
+    appid: '10169659',
+    secretId: 'AKIDta2EI8n4A95vWssrUxB9sLgogUEsvTPA',
+    secretKey: 'e4E8nDNH7tWu3xiPy6ybz95mDOREm48y',
+    userid: '755907724',
+    domain: 0
   } 
 }
