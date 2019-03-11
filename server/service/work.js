@@ -5,6 +5,7 @@ import {
     conf,
     youtu
 } from '../plug/youtu-nodejs_sdk'
+
 import { resolve } from 'path'
 
 const getFlow = async () => {
@@ -20,5 +21,5 @@ const getFlow = async () => {
 }
 
 export{
-    getFlow, 
+    getFlow
 }

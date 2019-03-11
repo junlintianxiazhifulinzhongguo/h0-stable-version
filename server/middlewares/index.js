@@ -10,6 +10,6 @@ const useMiddlewares = (app) => {
         require,
         name => resolve(__dirname,`./${name}`)
       )
-    )(middlewares) 
+    )(middlewares)
  }
  export default useMiddlewares 
